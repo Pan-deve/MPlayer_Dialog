@@ -18,7 +18,6 @@
 #define IDC_Next                        1010
 #define IDC_PlayTime                    1012
 #define IDC_Volume                      1013
-#define IDC_LIST1                       1016
 #define IDC_ListOfName                  1016
 
 // Next default values for new objects

@@ -55,6 +55,7 @@ CMFCPlayer20Dlg::CMFCPlayer20Dlg(CWnd* pParent /*=nullptr*/)
 	, edit_Playroom(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	numberOfFiles = 0;
 }
 
 void CMFCPlayer20Dlg::DoDataExchange(CDataExchange* pDX)
@@ -69,6 +70,7 @@ BEGIN_MESSAGE_MAP(CMFCPlayer20Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_AddMusic, &CMFCPlayer20Dlg::OnBnClickedAddmusic)
+	ON_BN_CLICKED(IDC_PLAY, &CMFCPlayer20Dlg::OnBnClickedPlay)
 END_MESSAGE_MAP()
 
 
@@ -161,14 +163,15 @@ HCURSOR CMFCPlayer20Dlg::OnQueryDragIcon()
 
 void CMFCPlayer20Dlg::OnBnClickedAddmusic()
 {
-	// TODO: 在此添加控件通知处理程序代码
-/*	CFileDialog DocSelectDlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ALLOWMULTISELECT, "MP3音频文件(*.mp3)|*.mp3", NULL);
+/*	// TODO: 在此添加控件通知处理程序代码
+	CFileDialog DocSelectDlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ALLOWMULTISELECT, "MP3音频文件(*.mp3)|*.mp3", NULL);
 	DocSelectDlg.m_ofn.nMaxFile = 100 * MAX_PATH;     // 100   Files   
 	DocSelectDlg.m_ofn.lpstrFile = new   TCHAR[DocSelectDlg.m_ofn.nMaxFile];
 	ZeroMemory(DocSelectDlg.m_ofn.lpstrFile, sizeof(TCHAR) * DocSelectDlg.m_ofn.nMaxFile);
 	CString buf[1000];
 	//	int num = 0;
 	int i = 0;
+	HWND hwnd= AfxGetMainWnd()->m_hWnd;
 	if (DocSelectDlg.DoModal() == IDCANCEL)return;
 	else
 	{
@@ -190,7 +193,8 @@ void CMFCPlayer20Dlg::OnBnClickedAddmusic()
 			m_PathOfMusicDoc[i] = DocSelectDlg.GetNextPathName(pos);
 		}
 	}
-	*/
+	Load(hwnd, m_PathOfMusicDoc[1]);*/
+	
 	TCHAR* p;//用于遍历音乐文件
 
 	int len = 0;
@@ -205,8 +209,8 @@ void CMFCPlayer20Dlg::OnBnClickedAddmusic()
 
 		lstrcpyn(szPath, szOpenFileName, ofn.nFileOffset);
 		/*当只选了一个文件时,下面的NULL是必须的
-		这是不区别待选了一个和多个文件情况
-		*/
+		这是不区别待选了一个和多个文件情况*/
+		
 
 		szPath[ofn.nFileOffset] = '\0';
 
@@ -218,23 +222,29 @@ void CMFCPlayer20Dlg::OnBnClickedAddmusic()
 		}
 
 		p = szOpenFileName + ofn.nFileOffset;
-
+	
 		ZeroMemory(szFileName, sizeof(szFileName));
 
 //		HWND hwndList = GetDlgItem(IDC_ListOfName);
-
+		
 		while (*p)
 		{
 			lstrcat(szFileName, szPath);/*给文件名加上路径*/
 
 			lstrcat(szFileName, p);/*加上文件名*/
+			lstrcat(szFileName, "!");
+			AfxExtractSubString(m_PathOfMusicDoc[numberOfFiles], szFileName, numberOfFiles,'!');
 
 //			ListBox_InsertString(hwndList, -1, p);
 			m_ListOfName.AddString(p);
-			lstrcat(szFileName, TEXT("\n"));/*换行*/
+//			lstrcat(szFileName, TEXT("\n"));/*换行
 
+			numberOfFiles++;
 			p += lstrlen(p) + 1;/*移到下一个文件*/
 		}
+//		m_PathOfMusicDoc = new CString[numberOfFiles];
+	
+		
 	}
 
 
@@ -275,4 +285,37 @@ void CMFCPlayer20Dlg::FileInit(HWND hwnd)
 int CMFCPlayer20Dlg::OpenFileDlg(void)
 {
 	return GetOpenFileName(&ofn);
+}
+
+void CMFCPlayer20Dlg::Load(HWND hWnd, CString strFilepath)
+{
+	m_hWnd = hWnd;
+	mciSendCommand(DeviceId, MCI_CLOSE, 0, 0); //在加载文件前先清空上一次播放的设备
+	mciopenparms.lpstrElementName = strFilepath; //将音乐文件路径传给设备
+	DWORD dwReturn;
+	if (dwReturn = mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_WAIT, (DWORD)(LPVOID)&mciopenparms))
+	{
+		//如果打开玩家失败,将出错信息储存在buffer,并显示出错警告
+		char buffer[256];
+		mciGetErrorString(dwReturn, buffer, 256); //获取错误码对应的错误信息
+//		MessageBox(hWnd, buffer, "出错警告！", MB_ICONHAND | MB_ICONERROR | MB_ICONSTOP); //弹出错误信息提示对话框
+	}
+	DeviceId = mciopenparms.wDeviceID;
+}
+
+void CMFCPlayer20Dlg::play()
+{
+	Load(m_hWnd, m_PathOfMusicDoc[1]);
+	MCI_PLAY_PARMS mciplayparms;
+	mciplayparms.dwCallback = (DWORD)m_hWnd;
+	mciplayparms.dwFrom = 0; //每次播放都是从0开始播放
+	mciSendCommand(DeviceId, MCI_PLAY, MCI_FROM | MCI_NOTIFY, (DWORD)(LPVOID)&mciplayparms);
+}
+
+
+void CMFCPlayer20Dlg::OnBnClickedPlay()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	play();
+	SetDlgItemText(IDC_STOP, "暂停");
 }
