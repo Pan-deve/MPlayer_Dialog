@@ -305,7 +305,7 @@ void CMFCPlayer20Dlg::Load(HWND hWnd, CString strFilepath)
 
 void CMFCPlayer20Dlg::play()
 {
-	Load(m_hWnd, m_PathOfMusicDoc[1]);
+//	Load(m_hWnd, m_PathOfMusicDoc[1]);
 	MCI_PLAY_PARMS mciplayparms;
 	mciplayparms.dwCallback = (DWORD)m_hWnd;
 	mciplayparms.dwFrom = 0; //每次播放都是从0开始播放
