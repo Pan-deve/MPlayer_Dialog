@@ -7,6 +7,7 @@
 #include "MFCPlayer2.0.h"
 #include "MFCPlayer2.0Dlg.h"
 #include "afxdialogex.h"
+#include"LIST1.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -63,6 +64,7 @@ void CMFCPlayer20Dlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_ListOfName, edit_Playroom);
 	DDX_Control(pDX, IDC_ListOfName, m_ListOfName);
+	DDX_Control(pDX, IDC_TAB1, songlist);
 }
 
 BEGIN_MESSAGE_MAP(CMFCPlayer20Dlg, CDialogEx)
@@ -106,7 +108,11 @@ BOOL CMFCPlayer20Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
+	//添加标签
+	songlist.AddPage("歌单1", &list1, IDD_DIALOG1);
+	songlist.AddPage("歌单2", &list2, IDD_DIALOG2);
+	//显示
+	songlist.Show();
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

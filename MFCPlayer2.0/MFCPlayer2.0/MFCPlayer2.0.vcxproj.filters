@@ -33,6 +33,24 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DblList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DblNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TabSheet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LIST1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LIST2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ADDpub.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCPlayer2.0.cpp">
@@ -42,6 +60,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DblList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DblNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TabSheet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LIST1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LIST2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ADDpub.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

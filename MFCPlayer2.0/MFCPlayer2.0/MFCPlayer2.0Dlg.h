@@ -5,6 +5,9 @@
 #pragma once
 #include <MMSystem.h>
 #include <Digitalv.h>
+#include"LIST1.h"
+#include"LIST2.h"
+#include"TabSheet.h"
 
 #pragma comment(lib, "Winmm.lib")
 /************************************************************************
@@ -75,4 +78,8 @@ private:
 	MCI_OPEN_PARMS mciopenparms;
 public:
 	afx_msg void OnBnClickedPlay();
+	CTabSheet songlist;  //主对话框上tabsheet
+	LIST1 list1;         //子对话框的标签
+	LIST2 list2;
+
 };
